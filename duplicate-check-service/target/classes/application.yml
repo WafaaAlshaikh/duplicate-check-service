@@ -1,0 +1,64 @@
+server:
+  port: 8081
+  servlet:
+    context-path: /
+
+spring:
+  application:
+    name: duplicate-check-service
+  
+  datasource:
+    url: jdbc:mysql://duplicate-check-mysql:3306/duplicate_check_db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+    username: appuser
+    password: apppassword
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+  
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
+# ========== ACTUATOR CONFIGURATION ==========
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+      base-path: /actuator
+    enabled-by-default: true
+  endpoint:
+    health:
+      show-details: always
+      enabled: true
+    info:
+      enabled: true
+
+# ========== GEMINI AI ==========
+gemini:
+  api:
+    key: ${GEMINI_API_KEY}
+    url: https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent
+
+# ========== DUPLICATE CHECK CONFIG ==========
+duplicate:
+  check:
+    threshold: ${DUPLICATE_CHECK_THRESHOLD:0.8}
+    enable-ai-check: ${DUPLICATE_ENABLE_AI_CHECK:true}
+
+# ========== LOGGING ==========
+logging:
+  level:
+    com.duplicate.check: DEBUG
+    org.springframework.web: INFO
+  file:
+    name: /app/logs/duplicate-check.log
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"

@@ -1,0 +1,7 @@
+spring.task.scheduling.enabled=true
+
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=false
+
+duplicate.check.temporary.cleanup.enabled=true
+duplicate.check.temporary.max-age-hours=24
